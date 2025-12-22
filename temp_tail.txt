@@ -1,0 +1,7 @@
+  .bg-image {
+    content: url('../img/servicemobile[1].png') !important;
+    object-position: center top !important;
+    height: 100vh !important;
+    object-fit: cover !important;
+  }
+}

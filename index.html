@@ -65,11 +65,11 @@
   <div class="about-intro" id="about">
 
     <!-- FUNNY PLANE COLLISION ANIMATION -->
-    <div class="funny-plane-collision">
+    <!-- <div class="funny-plane-collision">
       <div class="plane plane-left"></div>
       <div class="plane plane-right"></div>
       <div class="smoke"></div>
-    </div>
+    </div> -->
 
     <h2 class="intro-title">
       Your Vision. Our Runway.
@@ -1086,12 +1086,15 @@
         clearTimeout(isScrolling);
       }
 
-      // Collapses the route immediately (static state: plane icon visible)
+      // Collapses the route immediately
       function collapseRoute() {
-        route.style.maxWidth = "0";
-        route.style.opacity = "0";
+        menuOpen = false;
+        nav.classList.remove('open');
+        // Clear all inline styles to let CSS take over
+        route.style.maxWidth = "";
+        route.style.opacity = "";
         plane.style.transform = "";
-        links.forEach(link => link.style.opacity = "0");
+        links.forEach(link => link.style.opacity = "");
       }
 
       // Closes the mobile menu state
@@ -1101,28 +1104,32 @@
         collapseRoute();
       }
 
-      // --- CORE ANIMATION FUNCTION (DESKTOP) ---
+      // --- CORE ANIMATION FUNCTION ---
 
       function playArrivalAnimation() {
-        if (isMobile() || isHovering) return;
+        if (isHovering) return;
 
         // 1. Immediately reset everything and start clean
         resetTimersAndAnimation();
 
-        // 2. Expand
+        // 2. Clear any lingering inline styles from previous cycles
+        route.style.maxWidth = "";
+        route.style.opacity = "";
+        plane.style.transform = "";
+        links.forEach(link => link.style.opacity = "");
+
+        // 3. Expand via class
+        menuOpen = true;
         nav.classList.remove('nav-hidden');
         contactLinks.classList.remove('nav-hidden');
-        route.style.maxWidth = "600px";
-        route.style.opacity = "1";
-        plane.style.transform = "translateX(-8px)";
-        links.forEach(link => link.style.opacity = "1");
+        nav.classList.add('open');
 
-        // 3. Set a timeout for the clean collapse after 4 seconds
+        // 4. Set a timeout for the clean collapse after 5 seconds
         animationTimeout = setTimeout(() => {
           if (!isHovering) {
             collapseRoute();
           }
-          // 4. After collapsing, immediately restart the 5-second periodic check
+          // 5. After collapsing, start the 3-second periodic check
           startIdleTimer();
         }, 5000);
       }
@@ -1173,9 +1180,7 @@
             nav.classList.remove('nav-hidden');
             contactLinks.classList.remove('nav-hidden');
 
-            if (!isMobile()) {
-              playArrivalAnimation(); // Trigger initial expansion and timer loop
-            }
+            playArrivalAnimation(); // Trigger initial expansion and timer loop
           }
         }, 300);
       });
@@ -1235,14 +1240,8 @@
       const topThreshold = 50; // Only show nav when within 50px of top
 
       if (window.scrollY <= topThreshold) {
-        if (isMobile()) {
-          // Mobile: Just ensure visibility if at the top
-          nav.classList.remove('nav-hidden');
-          contactLinks.classList.remove('nav-hidden');
-        } else {
-          // Desktop: Start the full animation cycle immediately
-          playArrivalAnimation();
-        }
+        // Start the full animation cycle immediately for all screens
+        playArrivalAnimation();
       } else {
         // User loaded the page while scrolled down: Hide navigation
         nav.classList.add('nav-hidden');
@@ -1600,7 +1599,7 @@
 
 
     // MOBILE ADJUSTMENTS
-    if (window.innerWidth < 768) {
+    if (window.innerWidth <= 1366) {
       const ctaButton = document.querySelector('.takeoff-buttons');
       if (ctaButton) {
         const targetId = ctaButton.getAttribute('href');
