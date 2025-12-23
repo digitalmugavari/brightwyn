@@ -4165,7 +4165,6 @@ section {
   opacity: 0.7;
 }
 
-/* Form Container */
 .contact-content {
   width: 100%;
   max-width: 550px;
@@ -7368,16 +7367,22 @@ section {
 .bw-footer-links .column li {
   margin-bottom: 8px;
   font-size: 0.92rem;
+  color: #555;
+  transition: color 0.2s ease;
+}
+
+.bw-footer-links .column li:hover {
   color: #000000;
 }
 
 .bw-footer-links .column a {
   text-decoration: none;
-  color: #000000;
+  color: inherit;
   transition: 0.2s ease;
 }
 
 .bw-footer-links .column a:hover {
+  color: #000000;
   opacity: 1;
 }
 
@@ -8289,7 +8294,7 @@ body.whatsapp-open .widget-box {
 
   .departure-board,
   .departure-board:hover {
-     transform: translateX(-50%) scale(1.1) !important;
+    transform: translateX(-50%) scale(1.1) !important;
     top: 20% !important;
   }
 
