@@ -544,6 +544,7 @@
     </div>
 
     <div class="container">
+
       <div class="contact-content">
         <div class="section-header">
           <h2 class="section-titles">Book Your Digital Journey</h2>
@@ -672,7 +673,7 @@
 
       <div class="bw-footer-links">
         <div class="column">
-          <h3>Pages</h3>
+          <h3>Company</h3>
           <ul>
             <li><a href="#services">Services</a></li>
             <li><a href="#about">About Us</a></li>
@@ -680,21 +681,19 @@
           </ul>
         </div>
         <div class="column">
-          <h3>Services</h3>
+          <h3>Verticals</h3>
           <ul>
-            <li>AI Web Application</li>
-            <li>UI/UX Consulting</li>
-            <li>Cloud Solutions</li>
-            <li>E-Commerce Systems</li>
+            <li><a href="https://www.digitalmugavari.com/" target="_blank">Digital Marketing</a></li>
+            <li><a href="#services">AI Web Application</a></li>
           </ul>
         </div>
 
         <div class="column">
-          <h3>Contact</h3>
+          <h3>Office</h3>
           <ul>
-            <li><span>Email:</span> brightwyn.ai@gmail.com</li>
-            <li><span>Phone:</span> +91-8807838134</li>
-            <li><span>Location:</span>Pondicherry,India</li>
+            <li>Pondicherry,India</li>
+            <li><span>Email:</span> <a href="mailto:brightwyn.ai@gmail.com">brightwyn.ai@gmail.com</a></li>
+            <li><span>Phone:</span> <a href="#" id="whatsappTrigger2">+91-8807838134</a></li>
           </ul>
         </div>
       </div>
@@ -708,7 +707,7 @@
 
 
     <div class="bw-footer-bottom">
-      <p>Brightwyn Private Limited</p>
+      <p>Brightwyn Pvt Ltd.</p>
     </div>
 
   </footer>
@@ -2803,22 +2802,28 @@
       //     }, 10000);
       // });
 
-      const trigger = document.getElementById('whatsappTrigger');
+      const triggers = [
+        document.getElementById('whatsappTrigger'),
+        document.getElementById('whatsappTrigger2')
+      ];
 
-      // open via header icon
-      if (trigger) {
-        trigger.addEventListener('click', function (e) {
-          e.preventDefault();
-          if (overlay) { overlay.style.display = 'flex'; openOverlay(); }
-        });
-      }
+      // open via header icon or footer phone
+      triggers.forEach(t => {
+        if (t) {
+          t.addEventListener('click', function (e) {
+            e.preventDefault();
+            if (overlay) { overlay.style.display = 'flex'; openOverlay(); }
+          });
+        }
+      });
 
       // close button
       if (closeBtn) closeBtn.addEventListener('click', function () {
-        // animate shrink toward trigger if trigger exists
-        if (trigger && widgetBox) {
+        // animate shrink toward first trigger if it exists
+        const mainTrigger = triggers[0];
+        if (mainTrigger && widgetBox) {
           try {
-            const iconRect = trigger.getBoundingClientRect();
+            const iconRect = mainTrigger.getBoundingClientRect();
             const boxRect = widgetBox.getBoundingClientRect();
             const dx = iconRect.left + iconRect.width / 2 - (boxRect.left + boxRect.width / 2);
             const dy = iconRect.top + iconRect.height / 2 - (boxRect.top + boxRect.height / 2);
@@ -2838,9 +2843,10 @@
           // if clicked directly on overlay (outside widget-box)
           if (e.target === overlay) {
             // same shrinking animation when clicking outside
-            if (trigger && widgetBox) {
+            const mainTrigger = triggers[0];
+            if (mainTrigger && widgetBox) {
               try {
-                const iconRect = trigger.getBoundingClientRect();
+                const iconRect = mainTrigger.getBoundingClientRect();
                 const boxRect = widgetBox.getBoundingClientRect();
                 const dx = iconRect.left + iconRect.width / 2 - (boxRect.left + boxRect.width / 2);
                 const dy = iconRect.top + iconRect.height / 2 - (boxRect.top + boxRect.height / 2);
