@@ -48,6 +48,10 @@ body {
 :root {
   --scrollbar-color: #bebbb9;
   --scrollbar-hover: #9ba0a1;
+  /* Standardized Font Sizes */
+  --fs-title: clamp(1.8rem, 5vw, 3rem);
+  --fs-subtitle: clamp(1rem, 2vw, 1.15rem);
+  --fs-body: 1rem;
 }
 
 ::-webkit-scrollbar {
@@ -395,7 +399,7 @@ body {
 .hero-title {
   font-family: "Inter", sans-serif;
   font-weight: 400;
-  font-size: clamp(1.6rem, 5vw, 3rem);
+  font-size: var(--fs-title);
   margin-bottom: 1.5rem;
   margin-top: 50px;
   line-height: 1.15;
@@ -430,7 +434,7 @@ body {
 .hero-subtitle {
   font-family: "Inter", sans-serif;
   font-weight: 400;
-  font-size: clamp(1rem, 2vw, 1.125rem);
+  font-size: var(--fs-subtitle);
   color: var(--runway-gray);
   margin-bottom: 2.5rem;
   max-width: 400px;
@@ -2449,13 +2453,10 @@ section {
 .intro-title {
   font-family: "Inter", sans-serif;
   font-weight: 400;
-  font-size: clamp(2.2rem, 5vw, 4rem);
+  font-size: var(--fs-title);
   color: #000000;
   letter-spacing: 1px;
   margin-bottom: 15px;
-  animation: slideIn 1s ease forwards;
-  transform: translateY(50px);
-  opacity: 0;
   animation: slideIn 1s ease forwards;
   transform: translateY(50px);
   opacity: 0;
@@ -2465,7 +2466,7 @@ section {
 
   font-family: "Inter", sans-serif;
   font-weight: 400;
-  font-size: clamp(1rem, 2vw, 1.125rem);
+  font-size: var(--fs-subtitle);
 
   max-width: 750px;
   margin: 0 auto;
@@ -3198,7 +3199,7 @@ section {
 .bubble-text {
   font-family: "Inter", sans-serif;
   font-weight: 400;
-  font-size: 1.1rem;
+  font-size: var(--fs-body);
   line-height: 1.6;
   letter-spacing: 0.3px;
   color: #252525;
@@ -4153,23 +4154,32 @@ section {
   font-family: 'Poppins', sans-serif;
   font-weight: 800;
   font-size: 2.5rem;
-  color: #252525;
+  color: #000000;
   margin-bottom: 12px;
   letter-spacing: 0.5px;
+  white-space: nowrap;
 }
 
 .section-subtitles {
   font-family: 'Nunito', sans-serif;
-  font-size: 1.1rem;
+  font-size: var(--fs-subtitle);
   color: var(--runway-gray);
   opacity: 0.7;
 }
+
+/* Form Container */
+.contact .container {
+  justify-content: flex-end;
+  align-items: center;
+}
+
+
 
 .contact-content {
   width: 100%;
   max-width: 550px;
 }
- 
+
 
 .contact-form {
   background: white;
@@ -5391,7 +5401,7 @@ section {
 
 .about-title {
   font-family: "Inter", sans-serif;
-  font-size: clamp(2.5rem, 5vw, 4rem);
+  font-size: var(--fs-title);
   font-weight: 800;
   color: #252525;
   margin-bottom: 15px;
@@ -5439,7 +5449,7 @@ section {
 
 .about-subtitle {
   font-family: "Inter", sans-serif;
-  font-size: clamp(1.1rem, 2vw, 1.5rem);
+  font-size: var(--fs-subtitle);
   color: #252525;
   opacity: 0.7;
   font-style: italic;
@@ -5452,7 +5462,7 @@ section {
 
 .section-title {
   font-family: "Inter", sans-serif;
-  font-size: clamp(1.8rem, 3vw, 2.5rem);
+  font-size: var(--fs-title);
   font-weight: 700;
   color: #252525;
   margin-bottom: 30px;
@@ -5496,7 +5506,7 @@ section {
 
 .section-text {
   font-family: "Inter", sans-serif;
-  font-size: 1.2rem;
+  font-size: var(--fs-body);
   line-height: 1.8;
   color: #252525;
   max-width: 800px;
