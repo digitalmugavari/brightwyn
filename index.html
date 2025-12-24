@@ -541,9 +541,10 @@
     <span class="enquiry-text">ENQUIRY</span>
     <span class="enquiry-arrow"></span> -->
 
-    </div>
+
 
     <div class="container">
+
 
 
       <div class="contact-content">
@@ -686,6 +687,7 @@
           <ul>
             <li><a href="https://www.digitalmugavari.com/" target="_blank">Digital Marketing</a></li>
             <li><a href="#services">AI Web Application</a></li>
+            <li><a href="#services">Consulting</a></li>
           </ul>
         </div>
 
@@ -790,6 +792,7 @@
                 </svg>
               </button>
             </div>
+            <div id="whatsapp-submit-alert" style="margin-top: 10px; text-align: center; display: none;"></div>
           </form>
           <!-- floating close button positioned on top of the widget -->
           <button class="circle-btn-2 close-top" id="closeWhatsappForm" aria-label="Close">&times;</button>
@@ -2778,6 +2781,7 @@
           widgetBox.style.transition = '';
           widgetBox.style.transform = '';
           widgetBox.style.opacity = '';
+          widgetBox.style.display = '';
         }
         // show inner widget box after a tick to trigger scale animation
         try { document.body.classList.add('whatsapp-open'); } catch (e) { }
@@ -2882,79 +2886,59 @@
         var whatsappNumber = "918807838134";
         // Use the more compatible API endpoint which works on web and mobile
         var waUrl = "https://api.whatsapp.com/send?phone=" + whatsappNumber + "&text=" + text;
-        try {
-          // Try to open in a new tab/window. If popup is blocked, fallback to navigating current tab.
-          var newWin = window.open(waUrl, "_blank", "noopener,noreferrer");
-          if (!newWin) {
-            // Popup blocked — navigate current tab so the message still appears
-            // window.location.href = waUrl;
-          } else {
-            try { newWin.focus(); } catch (e) { }
-          }
-        } catch (e) {
-          // As a last resort, navigate the current tab
-          window.location.href = waUrl;
-        }
+        // WhatsApp redirection will happen after AJAX is initiated below
 
-        // Populate hidden fields with the widget selections (exposed by scriptstyle.js)
+
+        // Populate hidden fields with the widget selections
         try {
           const mainVal = window.selectedMainLabel || window.selectedMain || "";
           const serviceVal = window.selectedServiceBtn || "";
-          document.getElementById("selected_main").value = mainVal;
-          document.getElementById("selected_service").value = serviceVal;
-        } catch (err) {
-          // ignore if fields not present
-        }
+          if (document.getElementById("selected_main")) document.getElementById("selected_main").value = mainVal;
+          if (document.getElementById("selected_service")) document.getElementById("selected_service").value = serviceVal;
+        } catch (err) { }
 
-        // Hide the submit button(s) and show only the alert while request is running
-        const $submitBtns = $("#gform button[type='submit'], #gform .continue-btn");
+        // Show status immediately
+        const $submitBtns = $(this).find("button[type='submit']");
         $submitBtns.hide();
-        $("#submit-alert").html("Submitting...<br>Please wait").css({ "display": "contents", "color": "#E42320", "font-weight": "900" });
+        $("#whatsapp-submit-alert").html("Message Prepared!<br>Opening WhatsApp...").css({ "display": "block", "color": "#020263", "font-weight": "900" });
 
-        // serialize the form after hidden fields are set
-        const payload = $("#gform").serialize();
+        const $form = $(this);
+        const payload = $form.serialize();
 
+        // AJAX request to Google Sheets (silent background save)
         $.ajax({
           url: "https://script.google.com/macros/s/AKfycbwKVFdMuPJbrM09z28_Yf-owxRewvlBYyo-LHO1QqS-41bG3cwFvm9tkJOty52Io3fbNQ/exec",
           data: payload,
-          method: "post",
-          success: function (response) {
-            // show success alert, keep buttons hidden
-            $("#submit-alert").text("Form Submitted Successfully!!").css({ "display": "contents", "color": "#50b948", "font-weight": "900" });
-
-            // Fade out the widget modal after a short delay so user sees the confirmation
-            setTimeout(function () {
-              try {
-                // gracefully fade out the widget box
-                $("#widgetBox").fadeOut(600, function () {
-                  try { if (typeof closeWidget === 'function') closeWidget(); } catch (e) { }
-                  $(this).addClass('hide').removeClass('show').show(); // keep it hidden by class but restore display for future opens
-                });
-              } catch (e) {
-                try { if (typeof closeWidget === 'function') closeWidget(); } catch (e) { }
-              }
-            }, 1200);
-
-            // clear selections and form, then fade out the submit alert
-            setTimeout(function () {
-              $("#gform").trigger("reset");
-              // clear stored selections
-              try { if (window.selectedMain) delete window.selectedMain; if (window.selectedMainLabel) delete window.selectedMainLabel; if (window.selectedServiceBtn) delete window.selectedServiceBtn; } catch (e) { }
-              try { if (typeof resetWidget === 'function') resetWidget(); } catch (e) { }
-
-              // fade out the submit alert after user has seen success
-              setTimeout(function () {
-                $("#submit-alert").fadeOut(800, function () { $(this).text('').show(); });
-              }, 800);
-            }, 1600);
-          },
-          error: function (err) {
-            // On error, show error alert and re-show the submit button(s)
-            $("#submit-alert").text("Something Went Wrong!.. Check filled details and try again or contact us by WhatsApp/phone.")
-              .css({ "display": "contents", "color": "red", "font-weight": "900" });
-            $submitBtns.show();
-          }
+          method: "post"
         });
+
+        // Trigger WhatsApp redirection
+        setTimeout(() => {
+          try {
+            var newWin = window.open(waUrl, "_blank", "noopener,noreferrer");
+            if (newWin) {
+              try { newWin.focus(); } catch (e) { }
+            }
+          } catch (e) {
+            window.location.href = waUrl;
+          }
+        }, 100);
+
+        // Auto-close and reset after a delay so it's fresh when they return
+        setTimeout(function () {
+          if (widgetBox) {
+            $(widgetBox).fadeOut(600, function () {
+              if (typeof closeOverlay === 'function') closeOverlay();
+              $(this).addClass('hide').removeClass('show').show();
+            });
+          }
+          if (form) form.reset();
+          try { if (window.selectedMain) delete window.selectedMain; if (window.selectedMainLabel) delete window.selectedMainLabel; if (window.selectedServiceBtn) delete window.selectedServiceBtn; } catch (e) { }
+          try { if (typeof resetWidget === 'function') resetWidget(); } catch (e) { }
+          setTimeout(function () {
+            $("#whatsapp-submit-alert").fadeOut(400, function () { $(this).text('').show(); });
+          }, 400);
+        }, 1500);
       });
 
     })();
